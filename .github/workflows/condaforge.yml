@@ -1,0 +1,56 @@
+name: brew
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
+      fail-fast: false
+
+      matrix:
+        os: [macos-12, macos-14]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        miniforge-version: latest
+
+    - name: Install dependencies and source code
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      shell: bash -el {0}
+      run: |
+        conda install libboost-devel python numpy cmake compilers pkg-config make ninja eigen flann libode
+        git clone https://github.com/ompl/ompl
+
+    - name: Set reusable strings
+      # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+      id: strings
+      shell: bash -el {0}
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      shell: bash -el {0}
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -S ${{ github.workspace }}/ompl
+
+    - name: Build
+      shell: bash -el {0}
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+    - name: Test
+      shell: bash -el {0}
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: ctest --output-on-failure --build-config Release
