@@ -23,12 +23,24 @@ jobs:
       with:
         miniforge-version: latest
 
+    - name: Set platform [macos-12]
+      if: contains(matrix.os, 'macos-12')
+      shell: bash -el {0}
+      run: |
+        echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_OUTPUT"
+
+    - name: Set platform [macos-14]
+      if: contains(matrix.os, 'macos-14')
+      shell: bash -el {0}
+      run: |
+        echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_OUTPUT"
+
     - name: Install dependencies and source code
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       shell: bash -el {0}
       run: |
-        conda install libboost-devel python numpy cmake ld64 llvm-openmp cctools clangxx_osx-$(conda info --json | grep -oP '(?<="platform": ")[^"]*')==${{ matrix.clang_version }}.* clang_osx-$(conda info --json | grep -oP '(?<="platform": ")[^"]*')==${{ matrix.clang_version }}.* pkg-config make ninja eigen flann libode
+        conda install libboost-devel python numpy cmake ld64 llvm-openmp cctools clangxx_osx-${CONDA_PLATFORM}==${{ matrix.clang_version }}.* clang_osx-${CONDA_PLATFORM}==${{ matrix.clang_version }}.* pkg-config make ninja eigen flann libode
         git clone https://github.com/ompl/ompl
 
     - name: Set reusable strings
@@ -37,6 +49,7 @@ jobs:
       shell: bash -el {0}
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
