@@ -13,6 +13,7 @@ jobs:
       fail-fast: false
 
       matrix:
+        clang_version: [14, 15, 16, 17]
         os: [macos-12, macos-14]
 
     steps:
@@ -27,7 +28,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       shell: bash -el {0}
       run: |
-        conda install libboost-devel python numpy cmake compilers pkg-config make ninja eigen flann libode
+        conda install libboost-devel python numpy cmake ld64 llvm-openmp cctools clangxx_osx-$(conda info --json | grep -oP '(?<="platform": ")[^"]*')==${{ matrix.clang_version }}.* clang_osx-$(conda info --json | grep -oP '(?<="platform": ")[^"]*')==${{ matrix.clang_version }}.* pkg-config make ninja eigen flann libode
         git clone https://github.com/ompl/ompl
 
     - name: Set reusable strings
