@@ -27,13 +27,13 @@ jobs:
       if: contains(matrix.os, 'macos-12')
       shell: bash -el {0}
       run: |
-        echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_OUTPUT"
+        echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_ENV"
 
     - name: Set platform [macos-14]
       if: contains(matrix.os, 'macos-14')
       shell: bash -el {0}
       run: |
-        echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_OUTPUT"
+        echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_ENV"
 
     - name: Install dependencies and source code
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
