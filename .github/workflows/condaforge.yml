@@ -44,7 +44,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       shell: bash -el {0}
       run: |
-        conda install libboost-devel==${{ matrix.boost_version }}.* python numpy cmake ld64 llvm-openmp cctools clangxx_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* clang_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* libcxx==${{ libcxx_version }}.* pkg-config make ninja eigen flann libode
+        conda install libboost-devel==${{ matrix.boost_version }}.* python numpy cmake ld64 llvm-openmp cctools clangxx_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* clang_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* libcxx==${{ matrix.libcxx_version }}.* pkg-config make ninja eigen flann libode
         git clone https://github.com/ompl/ompl
 
     - name: Set reusable strings
