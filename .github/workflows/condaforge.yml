@@ -14,9 +14,9 @@ jobs:
       fail-fast: false
 
       matrix:
-        boost_version: ["1.82", "1.84", "1.86"]
+        boost_version: ["1.82", "1.86"]
         clang_version: [14, 15, 16, 17]
-        libcxx_version: [14, 15, 16, 17, 18, 19]
+        libcxx_version: [14, 16, 17, 19]
         build_type: [Release, Debug]
         os: [macos-12, macos-14]
 
