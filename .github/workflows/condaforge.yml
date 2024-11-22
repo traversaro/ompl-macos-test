@@ -16,6 +16,7 @@ jobs:
       matrix:
         boost_version: ["1.82", "1.84", "1.86"]
         clang_version: [14, 15, 16, 17]
+        libcxx_version: [14, 15, 16, 17, 18, 19]
         build_type: [Release, Debug]
         os: [macos-12, macos-14]
 
@@ -43,7 +44,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       shell: bash -el {0}
       run: |
-        conda install libboost-devel==${{ matrix.boost_version }}.* python numpy cmake ld64 llvm-openmp cctools clangxx_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* clang_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* pkg-config make ninja eigen flann libode
+        conda install libboost-devel==${{ matrix.boost_version }}.* python numpy cmake ld64 llvm-openmp cctools clangxx_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* clang_${CONDA_PLATFORM}==${{ matrix.clang_version }}.* libcxx==${{ libcxx_version }}.* pkg-config make ninja eigen flann libode
         git clone https://github.com/ompl/ompl
 
     - name: Set reusable strings
