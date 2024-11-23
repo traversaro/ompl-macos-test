@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: '[condaforge@clang:${{ matrix.clang_version }}@boost:${{ matrix.boost_version }}@${{ matrix.os }}@BuildType:${{ matrix.build_type }}]'
+    name: '[cf@cl:${{ matrix.clang_version }}@bst:${{ matrix.boost_version }}@${{ matrix.os }}@bt:${{ matrix.build_type }}]'
     runs-on: ${{ matrix.os }}
 
     strategy:
