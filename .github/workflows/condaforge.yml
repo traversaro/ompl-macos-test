@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: '[cl:${{ matrix.clang_version }}lc:${{ matrix.libcxx_version }}bo:${{ matrix.boost_version }}mo:{{ matrix.os_version }}bt:${{ matrix.build_type }}'
+    name: '[cl:${{ matrix.clang_version }}lc:${{ matrix.libcxx_version }}bo:${{ matrix.boost_version }}mo:${{ matrix.os_version }}bt:${{ matrix.build_type }}'
     runs-on: macos-${{ matrix.os_version }}
 
     strategy:
@@ -17,7 +17,7 @@ jobs:
         clang_version: [14, 15, 16, 17]
         libcxx_version: [14, 16, 17, 19]
         boost_version: ["1.82", "1.86"]
-        os_version: [12, 14]
+        os_version: [12, 14, 15]
         build_type: [Release, Debug]
 
     steps:
@@ -33,8 +33,8 @@ jobs:
       run: |
         echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_ENV"
 
-    - name: Set platform [macos-14]
-      if: contains(matrix.os_version, '14')
+    - name: Set platform [macos-14/macos-15]
+      if: contains(matrix.os_version, '14') or contains(matrix.os_version, '15')
       shell: bash -el {0}
       run: |
         echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_ENV"
