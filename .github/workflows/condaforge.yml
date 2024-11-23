@@ -34,7 +34,7 @@ jobs:
         echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_ENV"
 
     - name: Set platform [macos-14/macos-15]
-      if: contains(matrix.os_version, '14') or contains(matrix.os_version, '15')
+      if: contains(matrix.os_version, '14') || contains(matrix.os_version, '15')
       shell: bash -el {0}
       run: |
         echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_ENV"
