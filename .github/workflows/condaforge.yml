@@ -6,19 +6,19 @@ on:
 
 jobs:
   build:
-    name: '[cf@cl:${{ matrix.clang_version }}@bst:${{ matrix.boost_version }}@${{ matrix.os }}@bt:${{ matrix.build_type }}]'
-    runs-on: ${{ matrix.os }}
+    name: '[cl:${{ matrix.clang_version }}lc:${{ matrix.libcxx_version }}bo:${{ matrix.boost_version }}mo:{{ matrix.os_version }}bt:${{ matrix.build_type }}'
+    runs-on: macos-${{ matrix.os_version }}
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
 
       matrix:
-        boost_version: ["1.82", "1.86"]
         clang_version: [14, 15, 16, 17]
         libcxx_version: [14, 16, 17, 19]
+        boost_version: ["1.82", "1.86"]
+        os_version: [12, 14]
         build_type: [Release, Debug]
-        os: [macos-12, macos-14]
 
     steps:
     - uses: actions/checkout@v4
@@ -28,13 +28,13 @@ jobs:
         miniforge-version: latest
 
     - name: Set platform [macos-12]
-      if: contains(matrix.os, 'macos-12')
+      if: contains(matrix.os_version, '12')
       shell: bash -el {0}
       run: |
         echo "CONDA_PLATFORM=osx-64" >> "$GITHUB_ENV"
 
     - name: Set platform [macos-14]
-      if: contains(matrix.os, 'macos-14')
+      if: contains(matrix.os_version, '14')
       shell: bash -el {0}
       run: |
         echo "CONDA_PLATFORM=osx-arm64" >> "$GITHUB_ENV"
